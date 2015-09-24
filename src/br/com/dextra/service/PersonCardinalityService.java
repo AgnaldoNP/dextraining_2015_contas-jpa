@@ -10,6 +10,7 @@ import br.com.dextra.finances.entity.cardinality.PersonCardinality;
 
 public class PersonCardinalityService {
 
+	@SuppressWarnings("unchecked")
 	public static List<PersonCardinality> getByAddressStae(final String state) {
 		try {
 			final String jpql =

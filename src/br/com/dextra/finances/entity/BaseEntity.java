@@ -21,7 +21,7 @@ public class BaseEntity implements Serializable {
 	public final static String LASTUPDATE = "last_update";
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = ID, updatable = false, nullable = false)
 	private Long id = null;
 

@@ -16,9 +16,13 @@ public class PhoneCardinality extends BaseEntity {
 	private String number;
 
 	@Column(name = COUNTRYCODE)
-	private int countryCode;
+	private String countryCode;
 
-	public PhoneCardinality(final String number, final int countryCode) {
+	public PhoneCardinality() {
+		super();
+	}
+
+	public PhoneCardinality(final String number, final String countryCode) {
 		super();
 		this.number = number;
 		this.countryCode = countryCode;
@@ -32,11 +36,11 @@ public class PhoneCardinality extends BaseEntity {
 		this.number = number;
 	}
 
-	public int getCountryCode() {
+	public String getCountryCode() {
 		return countryCode;
 	}
 
-	public void setCountryCode(final int countryCode) {
+	public void setCountryCode(final String countryCode) {
 		this.countryCode = countryCode;
 	}
 

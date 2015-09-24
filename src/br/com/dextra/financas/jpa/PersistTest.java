@@ -1,12 +1,15 @@
 package br.com.dextra.financas.jpa;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import br.com.dextra.finances.entity.Investiment;
 import br.com.dextra.finances.entity.Person;
 import br.com.dextra.finances.entity.cardinality.AddressCardinality;
+import br.com.dextra.finances.entity.cardinality.AgencyCardinality;
 import br.com.dextra.finances.entity.cardinality.PersonCardinality;
+import br.com.dextra.finances.entity.cardinality.PhoneCardinality;
 import br.com.dextra.finances.entity.joined.IndividualsPersonJoined;
 import br.com.dextra.finances.entity.joined.LegalPersonJoined;
 import br.com.dextra.finances.entity.singletable.IndividualsPersonSingleTable;
@@ -35,6 +38,9 @@ public class PersistTest {
 		final Investiment investiment = new Investiment();
 		BaseService.saveEntity(investiment);
 
+
+
+
 		// Test with SINGLE_TABLE
 		final IndividualsPersonSingleTable individualsPersonSingleTable =
 				new IndividualsPersonSingleTable();
@@ -51,6 +57,9 @@ public class PersistTest {
 		BaseService.saveEntity(legalPersonSingleTable);
 		BaseService.saveEntity(individualsPersonSingleTable);
 
+
+
+
 		// Test with JOINED
 		final IndividualsPersonJoined individualsPersonJoined =
 				new IndividualsPersonJoined();
@@ -65,6 +74,9 @@ public class PersistTest {
 
 		BaseService.saveEntity(legalPersonJoined);
 		BaseService.saveEntity(individualsPersonJoined);
+
+
+
 
 		// Test with TABLE_PER_CLASS
 		final IndividualsPersonSingleTable individualsPersonTablePerClass =
@@ -82,6 +94,8 @@ public class PersistTest {
 		BaseService.saveEntity(legalPersonTablePerClass);
 		BaseService.saveEntity(individualsPersonTablePerClass);
 
+
+
 		// Test of entity with relation cardinality
 		final AddressCardinality address =
 				new AddressCardinality("Rua 1", 23, "SP", "Santa Gertrudes");
@@ -89,11 +103,26 @@ public class PersistTest {
 
 		final PersonCardinality personCardinality =
 				new PersonCardinality("Agnaldo", new Date(
-						System.currentTimeMillis()));;
+						System.currentTimeMillis()));
 		personCardinality.setAddress(address);
 		BaseService.saveEntity(personCardinality);
 
 		listPersonCardinalityByState();
+
+
+		final PhoneCardinality phone1 = new PhoneCardinality("123456789", "55");
+		final PhoneCardinality phone2 = new PhoneCardinality("123456789", "55");
+
+		BaseService.saveEntity(phone1);
+
+		final List<PhoneCardinality> phones = new ArrayList<PhoneCardinality>();
+		phones.add(phone1);
+		phones.add(phone2);
+
+		final AgencyCardinality agency =
+				new AgencyCardinality("Agencia Tabajaras", address, phones);
+
+		BaseService.saveEntity(agency);
 
 	}
 
