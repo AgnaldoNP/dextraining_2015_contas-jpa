@@ -9,6 +9,10 @@ import br.com.dextra.finances.entity.BaseEntity;
 @Entity
 public class AddressCardinality extends BaseEntity {
 
+	public enum UF {
+		SP, MG, RJ
+	}
+
 	public final static String STREET = "street";
 	public final static String NUMBER = "number";
 	public final static String STATE = "state";
@@ -25,6 +29,10 @@ public class AddressCardinality extends BaseEntity {
 
 	@Column(name = CITY)
 	private String city;
+
+	public AddressCardinality() {
+		super();
+	}
 
 	public AddressCardinality(final String street, final int number,
 			final String state, final String city) {

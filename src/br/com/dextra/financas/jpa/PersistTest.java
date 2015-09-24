@@ -13,8 +13,9 @@ import br.com.dextra.finances.entity.singletable.IndividualsPersonSingleTable;
 import br.com.dextra.finances.entity.singletable.LegalPersonSingleTable;
 import br.com.dextra.finances.entity.tableperclass.LegalPersonTablePerClass;
 import br.com.dextra.service.BaseService;
+import br.com.dextra.service.PersonCardinalityService;
 
-public class PersistPersonTest {
+public class PersistTest {
 
 	@SuppressWarnings("deprecation")
 	public static void main(final String[] args) {
@@ -81,15 +82,18 @@ public class PersistPersonTest {
 		BaseService.saveEntity(legalPersonTablePerClass);
 		BaseService.saveEntity(individualsPersonTablePerClass);
 
-
-
-		//Test of entity with relation cardinality
-		final AddressCardinality address = new AddressCardinality("Rua 1", 23, "SP", "Santa Gertrudes");
+		// Test of entity with relation cardinality
+		final AddressCardinality address =
+				new AddressCardinality("Rua 1", 23, "SP", "Santa Gertrudes");
 		BaseService.saveEntity(address);
 
-		final PersonCardinality personCardinality = new PersonCardinality("Agnaldo", new Date(System.currentTimeMillis()));;
+		final PersonCardinality personCardinality =
+				new PersonCardinality("Agnaldo", new Date(
+						System.currentTimeMillis()));;
 		personCardinality.setAddress(address);
 		BaseService.saveEntity(personCardinality);
+
+		listPersonCardinalityByState();
 
 	}
 
@@ -106,7 +110,6 @@ public class PersistPersonTest {
 		}
 	}
 
-
 	public static void getAllPersons() {
 		final List<Person> persons = BaseService.getAll(Person.class);
 		if (persons != null) {
@@ -119,6 +122,25 @@ public class PersistPersonTest {
 				System.out.println("");
 			}
 		}
+	}
+
+	private static void listPersonCardinalityByState() {
+		final List<PersonCardinality> persons =
+				PersonCardinalityService.getByAddressStae("SP");
+		System.out.println("------LISTANDO DADOS POR PESSOA---------");
+		System.out.println();
+		for (final PersonCardinality person : persons) {
+			System.out.println("ID.........:" + person.getId());
+			System.out.println("NOME.......:" + person.getName());
+			if (person.getAddress() != null) {
+				final AddressCardinality addressPerson = person.getAddress();
+				System.out.println(String.format("ENDEREÇO...:%s, %s - %s, %s",
+						addressPerson.getStreet(), addressPerson.getNumber(),
+						addressPerson.getCity(), addressPerson.getState()));
+			}
+			System.out.println();
+		}
+		System.out.println("----------------------------------------");
 	}
 
 }
