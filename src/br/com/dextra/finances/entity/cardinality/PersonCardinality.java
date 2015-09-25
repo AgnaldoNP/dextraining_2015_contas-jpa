@@ -2,9 +2,13 @@ package br.com.dextra.finances.entity.cardinality;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,6 +36,10 @@ public class PersonCardinality extends BaseEntity {
 
 	@OneToOne(optional = true)
 	private AddressCardinality address;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "person_Id")
+	private List<PhoneCardinality> phones;
 
 	public PersonCardinality() {
 		super();

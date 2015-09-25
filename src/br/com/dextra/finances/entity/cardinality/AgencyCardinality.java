@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -25,6 +26,7 @@ public class AgencyCardinality extends BaseEntity {
 	private AddressCardinality address;
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "agency_phone")
 	private List<PhoneCardinality> phones;
 
 	public AgencyCardinality() {
