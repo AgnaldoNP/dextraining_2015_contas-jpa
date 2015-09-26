@@ -6,16 +6,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.dextra.common.service.EntityManagerUtil;
-import br.com.dextra.finances.entity.cardinality.PersonCardinality;
+import br.com.dextra.finances.entity.Person;
 
 public class PersonCardinalityService {
 
 	@SuppressWarnings("unchecked")
-	public static List<PersonCardinality> getByAddressStae(final String state) {
+	public static List<Person> getByAddressStae(final String state) {
 		try {
 			final String jpql =
 					String.format("SELECT p FROM %s p WHERE p.address.state = :state",
-							PersonCardinality.class.getSimpleName());
+							Person.class.getSimpleName());
 
 			final EntityManager entityManager = EntityManagerUtil.getEM();
 			final Query query = entityManager.createQuery(jpql);

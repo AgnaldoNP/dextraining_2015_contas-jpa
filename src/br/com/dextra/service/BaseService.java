@@ -64,6 +64,48 @@ public class BaseService {
 		return baseEntity;
 	}
 
+	public static <T> T saveEntity2(final T entity) {
+		if (entity != null) {
+			final EntityTransaction tran =
+					EntityManagerUtil.getEM().getTransaction();
+			tran.begin();
+			try {
+				EntityManagerUtil.getEM().persist(entity);
+				tran.commit();
+			} catch (final Exception e) {
+				e.printStackTrace();
+				try {
+					tran.rollback();
+				} catch (final Exception e1) {
+					e1.printStackTrace();
+					throw e1;
+				}
+			}
+		}
+		return entity;
+	}
+
+	public static <T> T deleteEntity(final T entity) {
+		if (entity != null) {
+			final EntityTransaction tran =
+					EntityManagerUtil.getEM().getTransaction();
+			tran.begin();
+			try {
+				EntityManagerUtil.getEM().persist(entity);
+				tran.commit();
+			} catch (final Exception e) {
+				e.printStackTrace();
+				try {
+					tran.rollback();
+				} catch (final Exception e1) {
+					e1.printStackTrace();
+					throw e1;
+				}
+			}
+		}
+		return entity;
+	}
+
 	public static void delete(final BaseEntity baseEntity) {
 		final EntityTransaction tran =
 				EntityManagerUtil.getEM().getTransaction();

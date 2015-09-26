@@ -1,4 +1,4 @@
-package br.com.dextra.finances.entity.cardinality;
+package br.com.dextra.finances.entity;
 
 import java.util.List;
 
@@ -9,11 +9,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import br.com.dextra.finances.entity.BaseEntity;
-
 @SuppressWarnings("serial")
 @Entity
-public class AgencyCardinality extends BaseEntity {
+public class Agency extends BaseEntity {
 
 	public final static String NAME = "name";
 	public final static String ADDRESS = "adress";
@@ -22,19 +20,21 @@ public class AgencyCardinality extends BaseEntity {
 	@Column(name = NAME)
 	private String name;
 
-	@OneToOne(optional = false, cascade = CascadeType.MERGE)
-	private AddressCardinality address;
+	@OneToOne(optional = false, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+	private Address address;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE, CascadeType.REFRESH })
 	@JoinTable(name = "agency_phone")
-	private List<PhoneCardinality> phones;
+	private List<Phone> phones;
 
-	public AgencyCardinality() {
+	public Agency() {
 		super();
 	}
 
-	public AgencyCardinality(final String name,
-			final AddressCardinality address, final List<PhoneCardinality> phones) {
+	public Agency(final String name, final Address address,
+			final List<Phone> phones) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -49,11 +49,11 @@ public class AgencyCardinality extends BaseEntity {
 		this.name = name;
 	}
 
-	public AddressCardinality getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	public void setAddress(final AddressCardinality address) {
+	public void setAddress(final Address address) {
 		this.address = address;
 	}
 

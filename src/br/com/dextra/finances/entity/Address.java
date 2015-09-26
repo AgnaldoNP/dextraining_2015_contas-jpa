@@ -1,13 +1,11 @@
-package br.com.dextra.finances.entity.cardinality;
+package br.com.dextra.finances.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import br.com.dextra.finances.entity.BaseEntity;
-
 @SuppressWarnings("serial")
 @Entity
-public class AddressCardinality extends BaseEntity {
+public class Address extends BaseEntity {
 
 	public enum UF {
 		SP, MG, RJ
@@ -30,11 +28,11 @@ public class AddressCardinality extends BaseEntity {
 	@Column(name = CITY)
 	private String city;
 
-	public AddressCardinality() {
+	public Address() {
 		super();
 	}
 
-	public AddressCardinality(final String street, final int number,
+	public Address(final String street, final int number,
 			final String state, final String city) {
 		super();
 		this.street = street;

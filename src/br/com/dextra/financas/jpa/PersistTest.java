@@ -4,42 +4,29 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.dextra.finances.entity.Address;
+import br.com.dextra.finances.entity.Agency;
 import br.com.dextra.finances.entity.Investiment;
 import br.com.dextra.finances.entity.Person;
-import br.com.dextra.finances.entity.cardinality.AddressCardinality;
-import br.com.dextra.finances.entity.cardinality.AgencyCardinality;
-import br.com.dextra.finances.entity.cardinality.PersonCardinality;
-import br.com.dextra.finances.entity.cardinality.PhoneCardinality;
+import br.com.dextra.finances.entity.Phone;
+import br.com.dextra.finances.entity.ServicePackage;
 import br.com.dextra.finances.entity.joined.IndividualsPersonJoined;
 import br.com.dextra.finances.entity.joined.LegalPersonJoined;
 import br.com.dextra.finances.entity.singletable.IndividualsPersonSingleTable;
 import br.com.dextra.finances.entity.singletable.LegalPersonSingleTable;
 import br.com.dextra.finances.entity.tableperclass.LegalPersonTablePerClass;
+import br.com.dextra.service.AgencyCardinalityService;
 import br.com.dextra.service.BaseService;
 import br.com.dextra.service.PersonCardinalityService;
 
 public class PersistTest {
 
-	@SuppressWarnings("deprecation")
 	public static void main(final String[] args) {
 
 		final Date now = new Date(System.currentTimeMillis());
 
-		// Simple test
-		final Person personA = new Person("Agnaldo", new Date("1992/03/05"));
-		BaseService.saveEntity(personA);
-
-		final Person personB = new Person("Maria", new Date("1995/09/03"));
-		BaseService.saveEntity(personB);
-
-		getPersonById(personA.getId());
-		getAllPersons();
-
 		final Investiment investiment = new Investiment();
 		BaseService.saveEntity(investiment);
-
-
-
 
 		// Test with SINGLE_TABLE
 		final IndividualsPersonSingleTable individualsPersonSingleTable =
@@ -57,9 +44,6 @@ public class PersistTest {
 		BaseService.saveEntity(legalPersonSingleTable);
 		BaseService.saveEntity(individualsPersonSingleTable);
 
-
-
-
 		// Test with JOINED
 		final IndividualsPersonJoined individualsPersonJoined =
 				new IndividualsPersonJoined();
@@ -74,9 +58,6 @@ public class PersistTest {
 
 		BaseService.saveEntity(legalPersonJoined);
 		BaseService.saveEntity(individualsPersonJoined);
-
-
-
 
 		// Test with TABLE_PER_CLASS
 		final IndividualsPersonSingleTable individualsPersonTablePerClass =
@@ -94,36 +75,71 @@ public class PersistTest {
 		BaseService.saveEntity(legalPersonTablePerClass);
 		BaseService.saveEntity(individualsPersonTablePerClass);
 
-
-
 		// Test of entity with relation cardinality
-		final AddressCardinality address =
-				new AddressCardinality("Rua 1", 23, "SP", "Santa Gertrudes");
+		final Address address =
+				new Address("Rua 1", 23, "SP", "Santa Gertrudes");
 		BaseService.saveEntity(address);
 
-		final PersonCardinality personCardinality =
-				new PersonCardinality("Agnaldo", new Date(
-						System.currentTimeMillis()));
+		final Person personCardinality = new Person("Agnaldo");
 		personCardinality.setAddress(address);
 		BaseService.saveEntity(personCardinality);
 
 		listPersonCardinalityByState();
 
+		final Phone phone1 = new Phone("123456789", "55");
+		final Phone phone2 = new Phone("43123456789", "55");
 
-		final PhoneCardinality phone1 = new PhoneCardinality("123456789", "55");
-		final PhoneCardinality phone2 = new PhoneCardinality("123456789", "55");
-
-		BaseService.saveEntity(phone1);
-
-		final List<PhoneCardinality> phones = new ArrayList<PhoneCardinality>();
+		final List<Phone> phones = new ArrayList<Phone>();
 		phones.add(phone1);
 		phones.add(phone2);
 
-		final AgencyCardinality agency =
-				new AgencyCardinality("Agencia Tabajaras", address, phones);
+		final Agency agency = new Agency("Agencia Tabajaras", address, phones);
 
 		BaseService.saveEntity(agency);
 
+		// Test
+		final Person personWithPhones = new Person("João");
+
+		final Phone phone3 = new Phone("65323445", "55");
+		final List<Phone> phones2 = new ArrayList<Phone>();
+		phones2.add(phone1);
+		phones2.add(phone3);
+		personWithPhones.setPhones(phones2);
+		BaseService.saveEntity(phone1);
+		BaseService.saveEntity(phone3);
+
+		final ServicePackage service = new ServicePackage("Serviço 1", 350D);
+		final ServicePackage service2 = new ServicePackage("Serviço 1", 350D);
+		final List<ServicePackage> services = new ArrayList<ServicePackage>();
+		services.add(service);
+		services.add(service2);
+		personWithPhones.setServices(services);
+		BaseService.saveEntity2(service);
+		BaseService.saveEntity(service2);
+
+		BaseService.saveEntity(personWithPhones);
+		listAgencyByPhone();
+
+	}
+
+	private static void listAgencyByPhone() {
+		final List<Agency> agencys =
+				AgencyCardinalityService.getByPhone("55", "123456789");
+		if ((agencys != null) && (agencys.size() > 0)) {
+			System.out.println("------LISTANDO DADOS POR PESSOA---------");
+			for (final Agency ag : agencys) {
+				System.out.println("NOME DA AGENCIA ... :" + ag.getName());
+				if (ag.getAddress() != null) {
+					final Address addressPerson = ag.getAddress();
+					System.out.println(String.format(
+							"ENDEREÇO...:%s, %s - %s, %s",
+							addressPerson.getStreet(),
+							addressPerson.getNumber(), addressPerson.getCity(),
+							addressPerson.getState()));
+				}
+			}
+			System.out.println("-----------------------------------------");
+		}
 	}
 
 	public static void getPersonById(final Long id) {
@@ -133,7 +149,6 @@ public class PersistTest {
 				System.out.println("------LISTANDO DADOS POR PESSOA---------");
 				System.out.println("ID.....:" + person.getId());
 				System.out.println("NOME...:" + person.getName());
-				System.out.println("IDADE..:" + person.getAge());
 				System.out.println("----------------------------------------");
 			}
 		}
@@ -146,7 +161,6 @@ public class PersistTest {
 			for (final Person person : persons) {
 				System.out.println("ID.....:" + person.getId());
 				System.out.println("NOME...:" + person.getName());
-				System.out.println("IDADE..:" + person.getAge());
 				System.out.println("----------------------------------------");
 				System.out.println("");
 			}
@@ -154,15 +168,15 @@ public class PersistTest {
 	}
 
 	private static void listPersonCardinalityByState() {
-		final List<PersonCardinality> persons =
+		final List<Person> persons =
 				PersonCardinalityService.getByAddressStae("SP");
 		System.out.println("------LISTANDO DADOS POR PESSOA---------");
 		System.out.println();
-		for (final PersonCardinality person : persons) {
+		for (final Person person : persons) {
 			System.out.println("ID.........:" + person.getId());
 			System.out.println("NOME.......:" + person.getName());
 			if (person.getAddress() != null) {
-				final AddressCardinality addressPerson = person.getAddress();
+				final Address addressPerson = person.getAddress();
 				System.out.println(String.format("ENDEREÇO...:%s, %s - %s, %s",
 						addressPerson.getStreet(), addressPerson.getNumber(),
 						addressPerson.getCity(), addressPerson.getState()));

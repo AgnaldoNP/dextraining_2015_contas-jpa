@@ -1,13 +1,11 @@
-package br.com.dextra.finances.entity.cardinality;
+package br.com.dextra.finances.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-import br.com.dextra.finances.entity.BaseEntity;
-
 @SuppressWarnings("serial")
 @Entity
-public class PhoneCardinality extends BaseEntity {
+public class Phone extends BaseEntity {
 
 	public final static String NUMEBER = "number";
 	public final static String COUNTRYCODE = "countryCode";
@@ -18,11 +16,11 @@ public class PhoneCardinality extends BaseEntity {
 	@Column(name = COUNTRYCODE)
 	private String countryCode;
 
-	public PhoneCardinality() {
+	public Phone() {
 		super();
 	}
 
-	public PhoneCardinality(final String number, final String countryCode) {
+	public Phone(final String number, final String countryCode) {
 		super();
 		this.number = number;
 		this.countryCode = countryCode;

@@ -2,12 +2,14 @@ package br.com.dextra.finances.entity;
 
 import java.math.BigDecimal;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class Investiment extends BaseEntity{
+public class Investiment extends BaseEntity {
 
 	public static final String DESCRIPTION = "description";
 	public static final String AMOUNT = "amount";
@@ -21,6 +23,10 @@ public class Investiment extends BaseEntity{
 
 	@Column(name = MONTHLYINCOME)
 	private BigDecimal monthlyIncome;
+
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.REMOVE, CascadeType.REFRESH })
+	private Person person;
 
 	public String getDescription() {
 		return description;

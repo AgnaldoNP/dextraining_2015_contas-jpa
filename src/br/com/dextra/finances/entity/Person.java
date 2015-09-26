@@ -1,39 +1,60 @@
 package br.com.dextra.finances.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @SuppressWarnings("serial")
 @Entity
-public class Person extends BaseEntity{
+public class Person extends BaseEntity {
 
 	public static final String NAME = "name";
-	public static final String BIRTHDATE = "birthDate";
 	public static final String GROSSSALARY = "grossSalary";
+	public static final String ADDRESS = "address";
 
 	@Column(name = NAME)
 	private String name;
 
-	@Column(name = BIRTHDATE)
-	@Temporal(TemporalType.DATE)
-	private Date birthDate;
-
 	@Column(name = GROSSSALARY)
 	private BigDecimal grossSalary;
+
+	@OneToOne(optional = true, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+	private Address address;
+
+	@OneToMany(cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+	@JoinColumn(name = "person_Id")
+	private List<Phone> phones;
+
+	@Embedded
+	@ElementCollection
+	@OneToMany(mappedBy = "person", cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+	private List<Investiment> investments;
+
+	@Embedded
+	@ElementCollection
+	@ManyToMany(mappedBy = "persons", cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
+	private List<ServicePackage> servicePackages;
 
 	public Person() {
 		super();
 	}
 
-	public Person(final String name, final Date birstDate) {
+	public Person(final String name) {
 		super();
 		this.name = name;
-		this.birthDate = birstDate;
 	}
 
 	public String getName() {
@@ -44,14 +65,6 @@ public class Person extends BaseEntity{
 		this.name = name;
 	}
 
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirtDate(final Date birstDate) {
-		this.birthDate = birstDate;
-	}
-
 	public BigDecimal getGrossSalary() {
 		return grossSalary;
 	}
@@ -60,17 +73,20 @@ public class Person extends BaseEntity{
 		this.grossSalary = grossSalary;
 	}
 
-	public int getAge() {
-		if (birthDate != null) {
-			final long now = System.currentTimeMillis();
-			final long birth = birthDate.getTime();
+	public Address getAddress() {
+		return address;
+	}
 
-			final long dif = now - birth;
+	public void setAddress(final Address address) {
+		this.address = address;
+	}
 
-			return (int) (dif / (24 * 60 * 60 * 1000 * 365));
-		}
+	public List<Phone> getPhones() {
+		return phones;
+	}
 
-		return 0;
+	public void setPhones(final List<Phone> phones) {
+		this.phones = phones;
 	}
 
 }
