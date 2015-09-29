@@ -9,7 +9,6 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -44,7 +43,7 @@ public class Person extends BaseEntity {
 
 	@Embedded
 	@ElementCollection
-	@ManyToMany(mappedBy = "persons", cascade = { CascadeType.PERSIST,
+	@OneToMany(mappedBy = "persons", cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<ServicePackage> servicePackages;
 
@@ -88,5 +87,22 @@ public class Person extends BaseEntity {
 	public void setPhones(final List<Phone> phones) {
 		this.phones = phones;
 	}
+
+	public List<Investiment> getInvestments() {
+		return investments;
+	}
+
+	public void setInvestments(final List<Investiment> investments) {
+		this.investments = investments;
+	}
+
+	public List<ServicePackage> getServicePackages() {
+		return servicePackages;
+	}
+
+	public void setServicePackages(final List<ServicePackage> servicePackages) {
+		this.servicePackages = servicePackages;
+	}
+
 
 }

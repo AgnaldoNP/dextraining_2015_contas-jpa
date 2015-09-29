@@ -2,9 +2,10 @@ package br.com.dextra.finances.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @SuppressWarnings("serial")
@@ -21,7 +22,8 @@ public class ServicePackage extends BaseEntity {
 	@Column(name = AMOUT, precision = 2, scale = 2)
 	private Double amount;
 
-	@ManyToMany
+	@OneToMany(cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH })
 	private List<Person> persons;
 
 	public ServicePackage() {

@@ -113,7 +113,7 @@ public class PersistTest {
 		final List<ServicePackage> services = new ArrayList<ServicePackage>();
 		services.add(service);
 		services.add(service2);
-		personWithPhones.setServices(services);
+		personWithPhones.setServicePackages(services);
 		BaseService.saveEntity2(service);
 		BaseService.saveEntity(service2);
 
